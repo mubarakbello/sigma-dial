@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
-    response = request.post['text']
+    response = request.get_date().text
     responses = response.strip('*')
     if response == '':
         print('CON DialMail\nRead and send quick mails!\n1. Read mails\n2. Send a quick mail')
