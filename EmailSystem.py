@@ -11,6 +11,7 @@ def mail_sender(sender, password, recipient, subject, message):
     #     server.login(sender, password)
     # except Exception:
     #     return 'END Error validating your details.\nTry again later'
+    print(sender, password)
     server.login(sender,password)
     try:
         response_text = MIMEMultipart()
