@@ -6,6 +6,10 @@ from email.mime.text import MIMEText
 
 def mail_sender(sender, password, recipient, subject, message):
     server = smtplib.SMTP('smtp.gmail.com')
+    server.connect("smtp.gmail.com", 465)
+    server.ehlo()
+    server.starttls()
+    server.ehlo()
     # server.starttls()
     # server.starttls() not used because of the port, if .smtp with port 587 were used it'll be relevant
     # try:
