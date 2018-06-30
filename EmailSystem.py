@@ -7,10 +7,11 @@ from email.mime.text import MIMEText
 def mail_sender(sender, password, recipient, subject, message):
     server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
     # server.starttls() not used because of the port, if .smtp with port 587 were used it'll be relevant
-    try:
-        server.login(sender, password)
-    except Exception:
-        return 'END Error validating your details.\nTry again later'
+    # try:
+    #     server.login(sender, password)
+    # except Exception:
+    #     return 'END Error validating your details.\nTry again later'
+    server.login(sender,password)
     try:
         response_text = MIMEMultipart()
         response_text['To'] = recipient
