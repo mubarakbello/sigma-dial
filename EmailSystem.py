@@ -18,13 +18,15 @@ def mail_sender(sender, password, recipient, subject, message):
         response_text['From'] = sender
         response_text['Subject'] = subject
         response_text.attach(MIMEText(message, 'plain'))
-        server.sendmail(sender, recipient, message)
+        server.sendmail(sender, recipient, response_text.as_string())
+        server.quit()
         return 'END Mail sent successfully!'
     except SMTPAuthenticationError:
+        server.quit()
         return 'END Response not accepted by Google.'
     except Exception:
+        server.quit()
         return 'END Error sending mail. Please try agin later.'
-    server.quit()
 
 
 def mail_receiver():
