@@ -1,2 +1,2 @@
-# ForLoop-delta
-forloopoauhackathon
+# ForLoop-sigma
+forLoop-OAUhackathon
