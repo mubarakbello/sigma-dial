@@ -5,11 +5,10 @@ from email.mime.text import MIMEText
 
 
 def mail_sender(sender, password, recipient, subject, message):
-    server = smtplib.SMTP('smtp.gmail.com')
-    server.connect("smtp.gmail.com", 587)
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    # server.connect("smtp.gmail.com", 587)
     server.ehlo()
     server.starttls()
-    server.ehlo()
     # server.starttls()
     # server.starttls() not used because of the port, if .smtp with port 587 were used it'll be relevant
     # try:
@@ -24,13 +23,13 @@ def mail_sender(sender, password, recipient, subject, message):
         response_text['Subject'] = subject
         response_text.attach(MIMEText(message, 'plain'))
         server.sendmail(sender, recipient, response_text.as_string())
-        server.quit()
+        server.close()
         return 'END Mail sent successfully!'
     except SMTPAuthenticationError:
-        server.quit()
+        server.close()
         return 'END Response not accepted by Google.'
     except Exception:
-        server.quit()
+        server.close()
         return 'END Error sending mail. Please try agin later.'
 
 
