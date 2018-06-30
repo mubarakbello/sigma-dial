@@ -3,8 +3,6 @@ from smtplib import SMTPAuthenticationError
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-print('Welcome to Email Sending System, kindly follow all instructions as go on')
-
 
 def mail_sender(sender, password, recipient, subject, message):
     server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
