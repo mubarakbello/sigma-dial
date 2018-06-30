@@ -10,7 +10,7 @@ def mail_sender(sender, password, recipient, subject, message):
     try:
         server.login(sender, password)
     except Exception:
-        print('END Error validating your details.\nTry again later')
+        return 'END Error validating your details.\nTry again later'
     try:
         response_text = MIMEMultipart()
         response_text['To'] = recipient
@@ -18,11 +18,11 @@ def mail_sender(sender, password, recipient, subject, message):
         response_text['Subject'] = subject
         response_text.attach(MIMEText(message, 'plain'))
         server.sendmail(sender, recipient, message)
-        print('END Mail sent successfully!')
+        return 'END Mail sent successfully!'
     except SMTPAuthenticationError:
-        print('END Response not accepted by Google.')
+        return 'END Response not accepted by Google.'
     except Exception:
-        print('END Error sendding mail. Please try agin later.')
+        return 'END Error sending mail. Please try agin later.'
     server.quit()
 
 

@@ -30,7 +30,7 @@ def webhook():
     elif len(responses) == 5:
         if responses[0] == '2': text_mes = 'CON DialMail\n\nMessage body:'
     elif len(responses) == 6:
-        if responses[0] == '2': mail_sender(*responses[1:])
+        if responses[0] == '2': text_mes = mail_sender(*responses[1:])
     # text_mes = 'END An error occurred. Try again later'
     return text_mes
 
