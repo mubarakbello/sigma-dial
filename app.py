@@ -22,15 +22,15 @@ def webhook():
     elif response == '2':
         text_mes = 'CON DialMail\nEnter your gmail login details\n\nE-mail:'
     elif len(responses) == 2:
-        if responses[0] == 2: text_mes = 'CON DialMail\n\nPassword:'
+        if responses[0] == '2': text_mes = 'CON DialMail\n\nPassword:'
     elif len(responses) == 3:
-        if responses[0] == 2: text_mes = "CON DialMail\n\nRecipient's mail address:"
+        if responses[0] == '2': text_mes = "CON DialMail\n\nRecipient's mail address:"
     elif len(responses) == 4:
-        if responses[0] == 2: text_mes = 'CON DialMail\n\nSubject:'
+        if responses[0] == '2': text_mes = 'CON DialMail\n\nSubject:'
     elif len(responses) == 5:
-        if responses[0] == 2: text_mes = 'CON DialMail\n\nMessage body:'
+        if responses[0] == '2': text_mes = 'CON DialMail\n\nMessage body:'
     elif len(responses) == 6:
-        if responses[0] == 2: mail_sender(*responses[1:])
+        if responses[0] == '2': mail_sender(*responses[1:])
     # text_mes = 'END An error occurred. Try again later'
     return text_mes
 
