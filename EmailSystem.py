@@ -5,7 +5,7 @@ from email.mime.text import MIMEText
 
 
 def mail_sender(sender, password, recipient, subject, message):
-    server = smtplib.SMTP('smtp.gmail.com')
+    server = smtplib.SMTP('smtp.gmail.com', 25)
     server.connect("smtp.gmail.com", 465)
     server.ehlo()
     server.starttls()
