@@ -6,10 +6,9 @@ forLoop-OAUhackathon
 this is a text to email Service use to send emails via ussd short code.
 
 on dialing the shortcode you get to settle between two option
---+read mails
---
---+send quick mail
---
+read mails
+send quick mail
+
 
 Read mail
 -
