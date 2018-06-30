@@ -14,22 +14,23 @@ def webhook():
     response = request.form['text']
     responses = response.strip('*')
     if response == '':
-        print('CON DialMail\nRead and send quick mails!\n1. Read mails\n2. Send a quick mail')
+        text_mes = 'CON DialMail\nRead and send quick mails!\n1. Read mails\n2. Send a quick maail'
     elif response == '1':
-        print('CON ')
+        text_mes = 'CON '
     elif response == '2':
-        print('CON DialMail\nEnter your gmail login details\n\nE-mail:')
+        text_mes = 'CON DialMail\nEnter your gmail login details\n\nE-mail:'
     elif len(responses) == 2:
-        if responses[0] == 2: print('CON DialMail\n\nPassword:')
+        if responses[0] == 2: text_mes = 'CON DialMail\n\nPassword:'
     elif len(responses) == 3:
-        if responses[0] == 2: print("CON DialMail\n\nRecipient's mail address:")
+        if responses[0] == 2: text_mes = "CON DialMail\n\nRecipient's mail address:"
     elif len(responses) == 4:
-        if responses[0] == 2: print('CON DialMail\n\nSubject:')
+        if responses[0] == 2: text_mes = 'CON DialMail\n\nSubject:'
     elif len(responses) == 5:
-        if responses[0] == 2: print('CON DialMail\n\nMessage body:')
+        if responses[0] == 2: text_mes = 'CON DialMail\n\nMessage body:'
     elif len(responses) == 6:
         if responses[0] == 2: mail_sender(*responses[1:])
-    # print('END An error occurred. Try again later')
+    # text_mes = 'END An error occurred. Try again later'
+    return text_mes
 
 
 if __name__ == '__main__':
