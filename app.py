@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
-    text_mes = 'END '
+    text_mes = 'END Mail sent successfully!'
     response = request.form['text']
     responses = response.split('*')
     print(responses)
