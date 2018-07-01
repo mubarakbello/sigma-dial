@@ -32,7 +32,6 @@ def webhook():
     elif len(responses) == 6:
         # if responses[0] == '2': text_mes = mail_sender(*responses[1:])
         if responses[0] == '2': text_mes = myapp.send_mail(responses[1], *responses[3:])
-    # text_mes = 'END An error occurred. Try again later'
     return text_mes
 
 
