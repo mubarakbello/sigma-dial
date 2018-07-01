@@ -1,21 +1,21 @@
 # ForLoop-sigma
 forLoop-OAUhackathon
 
-# DialMail
+# SigmaDial
 
-this is a text to email Service use to send emails via ussd short code.
+This is a text to email Service use to send emails via ussd short code.
 
-on dialing the shortcode you get to settle between two option
-read mails
-send quick mail
+On dialing the shortcode you get to settle between two option
+-Read mails
+-Send quick mail
 
 
 Read mail
 -
-user will be promote to enter authentecation details and get an sms of your emails.
+Users will be promoted to enter authentication details and get an sms of your emails.
 
 Send mail
 -
-users are promote to enter authentecation details 
+users are promoted to enter authentication details 
 then User enter recipents email, subject, body of mail in that order.
 

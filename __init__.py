@@ -35,5 +35,5 @@ def webhook():
     return text_mes
 
 
-if __name__ == '__main__':
-    app.run()
+# if __name__ == '__main__':
+#     app.run()
