@@ -1,7 +1,6 @@
 import africastalking as afs
 from flask import Flask, request
 import myapp
-
 from EmailSystem import mail_sender
 
 USERNAME = 'sandbox'
