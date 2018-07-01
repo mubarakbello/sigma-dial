@@ -1,4 +1,5 @@
-import smtplib
+import smtplib, base64
+import myapp
 from smtplib import SMTPAuthenticationError
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -18,6 +19,7 @@ def mail_sender(sender, password, recipient, subject, message):
         response_text['From'] = sender
         response_text['Subject'] = subject
         response_text.attach(MIMEText(message, 'plain'))
+        return {'raw': base64.urlsafe_b64encode(response_text.as_string())}
         server.sendmail(sender, recipient, response_text.as_string())
         server.close()
         return 'END Mail sent successfully!'
