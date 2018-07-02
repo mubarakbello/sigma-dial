@@ -123,6 +123,7 @@ def retrieveRefToken(usermail, password):
             try:
                 cur.execute('SELECT UserKey FROM users WHERE Email = ? AND Password = ?', (usermail, password))
                 userKey = cur.fetchall()
+                print(userKey)
                 conn.commit()
                 return userKey
             except Exception:
@@ -139,6 +140,7 @@ def retrieveUserInfo(option, mail_address, password='not-some_nice.value'):
                 cur.execute('CREATE TABLE IF NOT EXISTS users (Id INT PRIMARY KEY, Email VARCHAR(255), Password VARCHAR(20), UserKey VARCHAR(255));')
                 cur.execute('SELECT Email, Password FROM users')
                 emails = cur.fetchall()
+                print(emails)
                 conn.commit()
             except Exception:
                 emails = {}
@@ -156,6 +158,7 @@ def retrieveUserInfo(option, mail_address, password='not-some_nice.value'):
                 cur.execute('CREATE TABLE IF NOT EXISTS users (Id INT PRIMARY KEY, Email VARCHAR(255), Password VARCHAR(20));')
                 cur.execute('SELECT Email FROM users')
                 emails = cur.fetchall()
+                print(emails)
                 conn.commit()
             except Exception:
                 emails = []
