@@ -66,10 +66,9 @@
             $('#auth_button').click(function(e){
                 e.preventDefault();
                 $('#auth_button').text('Fetching Auth Link...').css('color', '#ff5867').css('cursor', 'progress').addClass('disabled');
-                $('a').load('https://dialmail.herokuapp.com/authen', function(data, statustxt, xhr){
-                    $('a').text(data).css('color', 'red');
-                    alert(data)
-                    $('a').attr('href', data);
+                $('a').load('https://dialmail.herokuapp.com/authen', function(){
+                    $('a').css('color', 'red');
+                    $('a').attr('href', $('a').text());
                     $('#mains').css('display', 'none');
                     $('#subs').css('display', 'block');
                     // Unable to fetch link
