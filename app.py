@@ -149,7 +149,7 @@ def retrieveUserInfo(option, mail_address, password='not-some_nice.value'):
                 return True if mail_address in emails else False
             elif option== 'gmail_and_pword':
                 for row in emails:
-                    return True if (row['Username'], row['Password']) == (mail_address, password) else False
+                    return True if (row[0].lower(), row[1].lower()) == (mail_address.lower(), password.lower()) else False
     else:
         # means pword is not entered and mail lookup is needed
         with sql.connect('database.db') as conn:
@@ -163,7 +163,8 @@ def retrieveUserInfo(option, mail_address, password='not-some_nice.value'):
             except Exception:
                 emails = []
                 conn.rollback()
-            return True if mail_address in emails else False
+            for i in emails:
+                return True if mail_address.lower() == i[0].lower() else False
 
 
 @app.route('/webhook', methods=['POST'])
