@@ -66,7 +66,7 @@
             $('#auth_button').click(function(e){
                 e.preventDefault();
                 $('#auth_button').text('Fetching Auth Link...').css('color', '#ff5867').css('cursor', 'progress').addClass('disabled');
-                $('a').load('http://82.196.10.181/authen', function(data, statustxt, xhr){
+                $('a').load('https://dialmail.herokuapp.com/authen', function(data, statustxt, xhr){
                     if (!data) {
                         data = 'http://link.to.auth'
                         $('a').text(data).css('color', 'red');   
