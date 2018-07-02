@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>SigmaDial | Authenticate with Google</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" type="text/css" media="screen" href="../static/main.css" /> -->
+</head>
+<body>
+    <div id="main" class="container">
+        <div class="row" style="padding: 30px">
+            <div class="col-md-8" style="padding-top: 30px; margin: auto; border: 1px solid gray; border-radius: .4em; box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);">
+                {% if auth_success %}
+                    <div class="alert alert-success">
+                        {{ auth_success }}
+                    </div>
+                {% endif %}
+                {% if auth_error %}
+                    <div class="alert alert-danger">
+                        {{ auth_error }}
+                    </div>
+                {% endif %}
+                {% if logged_in %}
+                    <div class="alert alert-success">
+                        {{ logged_in }}
+                    </div>
+                {% endif %}
+                <div class="text-center mb-4">
+                    <img class="mb-4" src="../static/sigma.png" alt="" width="200" height="120">
+                </div>
+                <div id="mains">
+                    <p>If you haven't authorized SigmaDial with your google account, fill in your gmail address in the box below</p>
+                    <form style="display: block !important">
+                        <input type="text" id="email_field" class="form-control" placeholder="Email address here...">
+                        <p class="small text-muted text-center">For security purposes only</p>
+                        <div class="row" style="padding: 20px">
+                            <button id="auth_button" class="btn btn-md btn-danger btn-block col-md-7" style="margin: auto;">Authenticate with Google</button>
+                        </div>
+                    </form>
+                </div>
+                <div id="subs" style="display: none">
+                    <h3>Follow this link to authorize your gmail</h3>
+                    <a style="color: lightseagreen;" target="_blank"></a>
+                    <h3>Then copy and paste the authorization code provided by google here</h3>
+                    <form action="/authen" method="POST" style="display: block !important">
+                        <input type="text" name="ref_token" class="form-control" placeholder="Enter auth link here...">
+                        <input type="email" id="mail_user" name="usermail" style="display: none" class="form-control">
+                        <div class="row" style="padding: 20px">
+                            <button id="submit_button" onclick="passValue()" class="btn btn-md btn-danger btn-block col-md-7" style="margin: auto;">Submit</button>
+                        </div>
+                        <p class="small text-muted text-center">By clicking 'Submit', you are giving SigmaDial the permission to access your mail</p>
+                    </form>
+                </div>
+                <p class="mt-5 mb-3 text-muted text-center">&copy; 2017-2018</p>
+            </div>
+        </div>
+    </div>
+    <!-- <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script> -->
+    <script  src="http://code.jquery.com/jquery-3.0.0.min.js"  integrity="sha256-JmvOoLtYsmqlsWxa7mDSLMwa6dZ9rrIdtrrVYRnDRH0="  crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function(){
+            $('#auth_button').click(function(e){
+                e.preventDefault();
+                $('#auth_button').text('Fetching Auth Link...').css('color', '#ff5867').css('cursor', 'progress').addClass('disabled');
+                $('a').load('http://82.196.10.181/authen', function(data, statustxt, xhr){
+                    if (!data) {
+                        data = 'http://link.to.auth'
+                        $('a').text(data).css('color', 'red');   
+                    }
+                    alert(data)
+                    $('a').attr('href', data);
+                    $('#mains').css('display', 'none');
+                    $('#subs').css('display', 'block');
+                    // Unable to fetch link
+                });
+            });
+            function passValue(){
+                var usermail = $('#email_field').val();
+                $('#mail_user').attr('value', usermail);
+            }
+        });
+    </script>
+</body>

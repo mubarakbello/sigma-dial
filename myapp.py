@@ -2,8 +2,9 @@ import base64
 import imaplib
 import json
 import smtplib
-import urllib.parse
-import urllib.request
+from urllib import parse as parsee
+from urllib import request as requester
+from smtplib import SMTPAuthenticationError
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import lxml.html
@@ -21,11 +22,11 @@ def command_to_url(command):
 
 
 def url_escape(text):
-    return urllib.parse.quote(text, safe='~-._')
+    return parsee.quote(text, safe='~-._')
 
 
 def url_unescape(text):
-    return urllib.parse.unquote(text)
+    return parsee.unquote(text)
 
 
 def url_format_params(params):
@@ -52,7 +53,7 @@ def call_authorize_tokens(client_id, client_secret, authorization_code):
     params['redirect_uri'] = REDIRECT_URI
     params['grant_type'] = 'authorization_code'
     request_url = command_to_url('o/oauth2/token')
-    response = urllib.request.urlopen(request_url, urllib.parse.urlencode(params).encode('UTF-8')).read().decode('UTF-8')
+    response = requester.urlopen(request_url, parsee.urlencode(params).encode('UTF-8')).read().decode('UTF-8')
     return json.loads(response)
 
 
@@ -63,7 +64,7 @@ def call_refresh_token(client_id, client_secret, refresh_token):
     params['refresh_token'] = refresh_token
     params['grant_type'] = 'refresh_token'
     request_url = command_to_url('o/oauth2/token')
-    response = urllib.request.urlopen(request_url, urllib.parse.urlencode(params).encode('UTF-8')).read().decode('UTF-8')
+    response = requester.urlopen(request_url, parsee.urlencode(params).encode('UTF-8')).read().decode('UTF-8')
     return json.loads(response)
 
 
@@ -89,13 +90,21 @@ def test_smpt(user, base64_auth_string):
     smtp_conn.docmd('AUTH', 'XOAUTH2 ' + base64_auth_string)
 
 
+def get_token_after_permission(google_client_id, google_client_secret, authorization_code):
+    response = call_authorize_tokens(google_client_id, google_client_secret, authorization_code)
+    # print("1.Response obtained")
+    return response['refresh_token'], response['access_token'], response['expires_in']
+
+
 def get_authorization(google_client_id, google_client_secret):
     scope = "https://mail.google.com/"
-    print('Navigate to the following URL to auth:', generate_permission_url(google_client_id, scope))
-    authorization_code = input('Enter verification code: ')
-    response = call_authorize_tokens(google_client_id, google_client_secret, authorization_code)
-    print("1.Response obtained")
-    return response['refresh_token'], response['access_token'], response['expires_in']
+    generated_permission_url = generate_permission_url(google_client_id, scope)
+    return generated_permission_url
+    # print('Navigate to the following URL to auth:', generated_permission_url)
+    # authorization_code = input('Enter verification code: ')
+    # response = call_authorize_tokens(google_client_id, google_client_secret, authorization_code)
+    # print("1.Response obtained")
+    # return response['refresh_token'], response['access_token'], response['expires_in']
 
 
 def refresh_authorization(google_client_id, google_client_secret, refresh_token):
@@ -103,8 +112,8 @@ def refresh_authorization(google_client_id, google_client_secret, refresh_token)
     return response['access_token'], response['expires_in']
 
 
-def send_mail(fromaddr, toaddr, subject, message):
-    access_token, expires_in = refresh_authorization(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN)
+def send_mail(ref_token, fromaddr, toaddr, subject, message):
+    access_token, expires_in = refresh_authorization(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, ref_token)
     auth_string = generate_oauth2_string(fromaddr, access_token, as_base64=True)
 
     msg = MIMEMultipart('related')
@@ -118,24 +127,28 @@ def send_mail(fromaddr, toaddr, subject, message):
     part_html = MIMEText(message.encode('utf-8'), 'html', _charset='utf-8')
     msg_alternative.attach(part_text)
     msg_alternative.attach(part_html)
-    server = smtplib.SMTP('smtp.gmail.com:587')
-    server.ehlo(GOOGLE_CLIENT_ID)
-    server.starttls()
-    server.docmd('AUTH', 'XOAUTH2 ' + auth_string)
-    server.sendmail(fromaddr, toaddr, msg.as_string())
-    server.quit()
+    try:
+        server = smtplib.SMTP('smtp.gmail.com:587')
+        server.ehlo(GOOGLE_CLIENT_ID)
+        server.starttls()
+        server.docmd('AUTH', 'XOAUTH2 ' + auth_string)
+        server.sendmail(fromaddr, toaddr, msg.as_string())
+        server.quit()
+        return 'END Mail sent succeccfully.'
+    except SMTPAuthenticationError as errr:
+        return 'END Error sending mail'
 
 
+# if __name__ == '__main__':
+#     if GOOGLE_REFRESH_TOKEN is None:
+#         print('No refresh token found, obtaining one')
+#         # refresh_token, access_token, expires_in = get_token_after_permission(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, <not-working-yet>)
+#         # refresh_token, access_token, expires_in = get_authorization(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET)
+#         print('2.Set refresh token to {}'.format(refresh_token))
+#         # print('Set the following as your GOOGLE_REFRESH_TOKEN:', refresh_token)
+#         # exit()
 
-if __name__ == '__main__':
-    if GOOGLE_REFRESH_TOKEN is None:
-        print('No refresh token found, obtaining one')
-        refresh_token, access_token, expires_in = get_authorization(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET)
-        print('2.Set refresh token to {}'.format(refresh_token))
-        # print('Set the following as your GOOGLE_REFRESH_TOKEN:', refresh_token)
-        # exit()
-
-    send_mail('bellomuba.rak0@gmail.com', 'dowolebolu@gmail.com',
-              'A mail from you from Python',
-              '<b>A mail from you from Python</b><br><br>' +
-              'So happy to hear from you!')
+#     send_mail('bellomuba.rak0@gmail.com', 'dowolebolu@gmail.com',
+#               'A mail from you from Python',
+#               '<b>A mail from you from Python</b><br><br>' +
+#               'So happy to hear from you!')

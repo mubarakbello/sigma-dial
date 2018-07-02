@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>SigmaDial | Authenticate with Google</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="screen" href="../static/main.css" />
+</head>
+<body>
+    <div id="main" class="container">
+        <div class="row" style="padding: 30px">
+            <div id="login" class="col-md-6" style="padding-top: 30px; margin: auto; border: 1px solid gray; border-radius: .4em; box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);">
+                {% if error %}
+                    <div class="alert alert-danger">
+                        {{ error }}
+                    </div>
+                {% endif %}
+                <form action="">
+                    <div class="text-center mb-4">
+                        <img class="mb-4" src="../static/sigma.png" alt="" width="200" height="120">
+                        <h1 class="h3 mb-3 font-weight-normal">Please log in / sign Up to SigmaDial</h1>
+                    </div>
+                    <div class="form-label-group">
+                        <label for="inputEmail">Email address</label>
+                        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" name="email" required>
+                    </div>
+                    <div class="form-label-group">
+                        <label for="inputPassword">SigmaDial Password</label>
+                        <input type="password" id="inputPassword" class="form-control" placeholder="Password"  name="password" required>
+                    </div>
+                    <div class="row" style="padding: 20px">
+                        <button class="btn btn-lg btn-primary btn-block col-md-4" type="submit">Log in</button>
+                        <span class="col-md-4" style="text-align: center; padding-top: 10px"> OR </span>
+                        <button class="btn btn-lg btn-primary btn-block col-md-4" type="submit">Sign up</button>
+                    </div>
+                    <p class="mt-5 mb-3 text-muted text-center">&copy; 2017-2018</p>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
