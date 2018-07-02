@@ -84,13 +84,13 @@ def add_ref_token():
         user = request.form['usermail']
         token = request.form['ref_token']
         token_obtained = myapp.get_token_after_permission(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, token)
-        boolea = updateUserKey(user, token_obtained['refresh_token'])
+        boolea = updateUserKey(user, token_obtained[0])
         if boolea:
             return render_template('panel.html', auth_success='Authentication complete. You can exit now.')
         else:
             return render_template('panel.html', auth_error='Error completing authentication. Try again later.')
     else:
-        return myapp.get_authorization()
+        return myapp.get_authorization(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET)
 
 
 def insertUser(mail_address, sigmadial_password):

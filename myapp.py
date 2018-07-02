@@ -2,8 +2,8 @@ import base64
 import imaplib
 import json
 import smtplib
-from urllib import parse as parsee
-from urllib import request as requester
+import urllib.parse
+import urllib.request
 from smtplib import SMTPAuthenticationError
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -22,11 +22,11 @@ def command_to_url(command):
 
 
 def url_escape(text):
-    return parsee.quote(text, safe='~-._')
+    return urllib.parse.quote(text, safe='~-._')
 
 
 def url_unescape(text):
-    return parsee.unquote(text)
+    return urllib.parse.unquote(text)
 
 
 def url_format_params(params):
@@ -53,7 +53,7 @@ def call_authorize_tokens(client_id, client_secret, authorization_code):
     params['redirect_uri'] = REDIRECT_URI
     params['grant_type'] = 'authorization_code'
     request_url = command_to_url('o/oauth2/token')
-    response = requester.urlopen(request_url, parsee.urlencode(params).encode('UTF-8')).read().decode('UTF-8')
+    response = urllib.request.urlopen(request_url, urllib.parse.urlencode(params).encode('UTF-8')).read().decode('UTF-8')
     return json.loads(response)
 
 
@@ -64,7 +64,7 @@ def call_refresh_token(client_id, client_secret, refresh_token):
     params['refresh_token'] = refresh_token
     params['grant_type'] = 'refresh_token'
     request_url = command_to_url('o/oauth2/token')
-    response = requester.urlopen(request_url, parsee.urlencode(params).encode('UTF-8')).read().decode('UTF-8')
+    response = urllib.request.urlopen(request_url, urllib.parse.urlencode(params).encode('UTF-8')).read().decode('UTF-8')
     return json.loads(response)
 
 
