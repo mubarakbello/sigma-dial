@@ -12,47 +12,46 @@
     <div id="main" class="container">
         <div class="row" style="padding: 30px">
             <div class="col-md-8" style="padding-top: 30px; margin: auto; border: 1px solid gray; border-radius: .4em; box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);">
-                {% if logged_in %}
+                {% if auth_success %}
                     <div class="alert alert-success">
-                        {{ logged_in }}
+                        {{ auth_success }}
                     </div>
                 {% endif %}
-                {% if acc_created %}
-                    <div class="alert alert-success">
-                        {{ acc_created }}
+                {% if auth_error %}
+                    <div class="alert alert-danger">
+                        {{ auth_error }}
                     </div>
                 {% endif %}
                 <div class="text-center mb-4">
                     <img class="mb-4" src="../static/sigma.png" alt="" width="200" height="120">
                 </div>
-                <div id="mains">
+                <!-- <div id="mains">
                     <p>If you haven't authorized SigmaDial with your google account, fill in your gmail address in the box below</p>
-                    <form style="display: block !important" action="/authen">
-                        <input type="text" name="email_field" class="form-control" placeholder="Email address here...">
+                    <form style="display: block !important">
+                        <input type="text" id="email_field" class="form-control" placeholder="Email address here...">
                         <p class="small text-muted text-center">For security purposes only</p>
                         <div class="row" style="padding: 20px">
-                            <button type="submit" class="btn btn-md btn-danger btn-block col-md-7" style="margin: auto;">Authenticate with Google</button>
+                            <button id="auth_button" class="btn btn-md btn-danger btn-block col-md-7" style="margin: auto;">Authenticate with Google</button>
                         </div>
                     </form>
-                </div>
-                <!-- <div id="subs" style="display: none">
+                </div> -->
+                <div id="subs">
                     <h3>Follow this link to authorize your gmail</h3>
                     <a style="color: lightseagreen;" target="_blank"></a>
                     <h3>Then copy and paste the authorization code provided by google here</h3>
                     <form action="/authen" method="POST" style="display: block !important">
                         <input type="text" name="ref_token" class="form-control" placeholder="Enter auth link here...">
-                        <input type="email" id="mail_user" name="usermail" style="display: none" class="form-control">
+                        <input type="email" id="mail_user" name="usermail" value="{{ email }}" class="form-control">
                         <div class="row" style="padding: 20px">
                             <button id="submit_button" class="btn btn-md btn-danger btn-block col-md-7" style="margin: auto;">Submit</button>
                         </div>
                         <p class="small text-muted text-center">By clicking 'Submit', you are giving SigmaDial the permission to access your mail</p>
                     </form>
-                </div> -->
+                </div>
                 <p class="mt-5 mb-3 text-muted text-center">&copy; 2017-2018</p>
             </div>
         </div>
     </div>
-    <!-- <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script> -->
     <script  src="http://code.jquery.com/jquery-3.0.0.min.js"  integrity="sha256-JmvOoLtYsmqlsWxa7mDSLMwa6dZ9rrIdtrrVYRnDRH0="  crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -69,10 +68,6 @@
                     // Unable to fetch link
                 });
             });
-            function passValue(){
-                var usermail = $('#email_field').val();
-                $('#mail_user').attr('value', usermail);
-            }
         });
     </script> -->
 </body>

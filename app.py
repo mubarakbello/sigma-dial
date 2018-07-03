@@ -93,13 +93,15 @@ def add_ref_token():
         boolea = updateUserKey(user, token_obtained[0])
         print(boolea)
         if boolea:
-            return render_template('panel.html', auth_success='Authentication complete. You can exit now.')
+            return render_template('landing.html', auth_success='Authentication complete. You can exit now.')
         else:
-            return render_template('panel.html', auth_error='Error completing authentication. Try again later.')
+            return render_template('landing.html', auth_error='Error completing authentication. Try again later.')
     else:
         auth_get = myapp.get_authorization(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET)
         print('Auth to be returned', auth_get)
-        return auth_get
+        mailing = request.form['email_field']
+        print('Email field:', mailing)
+        return render_template('landing.html', auth_gen=auth_get, email=mailing)
 
 
 def insertUser(mail_address, sigmadial_password):
@@ -165,6 +167,7 @@ def retrieveUserInfo(option, mail_address, password='not-some_nice.value'):
             if option == 'gmail':
                 return True if mail_address in emails else False
             elif option== 'gmail_and_pword':
+                if len(emails) == 0: return False
                 for row in emails:
                     print('Row i:', row)
                     return True if (row[0].lower(), row[1].lower()) == (mail_address.lower(), password.lower()) else False
