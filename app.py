@@ -67,15 +67,19 @@ def index():
     if request.method == 'POST':
         usermail = request.form['mail']
         user_sigmadial_pass = request.form['password']
+        print('Mail, pword from request:', usermail, user_sigmadial_pass)
         boolea = retrieveUserInfo('gmail_and_pword', usermail, user_sigmadial_pass)
+        print(boolea)
         if boolea:
             return render_template('panel.html', logged_in='Logged in successfully.')
         else:
             condi = insertUser(usermail, user_sigmadial_pass)
+            print(condi)
             if condi:
                 return render_template('panel.html', acc_created='Account created successfully.')
             else:
                 return render_template('index.html', error='Error creating your account.')
+    print('GET request')
     return render_template('index.html')
 
 @app.route('/authen', methods=['POST', 'GET'])
@@ -83,22 +87,29 @@ def add_ref_token():
     if request.method == 'POST':
         user = request.form['usermail']
         token = request.form['ref_token']
+        print('User, ref_token from request:', user, token)
         token_obtained = myapp.get_token_after_permission(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, token)
+        print('Refresh Token obtained from gg:', token_obtained)
         boolea = updateUserKey(user, token_obtained[0])
+        print(boolea)
         if boolea:
             return render_template('panel.html', auth_success='Authentication complete. You can exit now.')
         else:
             return render_template('panel.html', auth_error='Error completing authentication. Try again later.')
     else:
-        return myapp.get_authorization(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET)
+        auth_get = myapp.get_authorization(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET)
+        print('Auth to be returned', auth_get)
+        return auth_get
 
 
 def insertUser(mail_address, sigmadial_password):
+    print('About to insert user info to db')
     with sql.connect('database.db') as conn:
         cur = conn.cursor()
         try:
             cur.execute('CREATE TABLE IF NOT EXISTS users (Id INT PRIMARY KEY, Email VARCHAR(255), Password VARCHAR(20), UserKey VARCHAR(255));')
             cur.execute('INSERT INTO users (Email, Password, UserKey) VALUES (?,?,?);', (mail_address, sigmadial_password, ''))
+            print('Insert ops done')
             conn.commit()
             return True
         except Exception:
@@ -106,10 +117,12 @@ def insertUser(mail_address, sigmadial_password):
             return False
 
 def updateUserKey(mail_address, user_key):
+    print('About to update user key')
     with sql.connect('database.db') as conn:
         cur = conn.cursor()
         try:
             cur.execute('UPDATE users SET UserKey = ? WHERE Email = ?;', (user_key, mail_address))
+            print('Most liikely update is complete')
             conn.commit()
             return True
         except Exception:
@@ -118,12 +131,14 @@ def updateUserKey(mail_address, user_key):
 
 
 def retrieveRefToken(usermail, password):
+    print('About to retrieve ref token')
     with sql.connect('database.db') as conn:
             cur = conn.cursor()
             try:
                 cur.execute('SELECT UserKey FROM users WHERE Email = ? AND Password = ?', (usermail, password))
                 userKey = cur.fetchall()
-                print(userKey)
+                print('Type of userkeys returned', type(userKey))
+                print('Userkeys:', userKey)
                 conn.commit()
                 return userKey
             except Exception:
@@ -134,13 +149,15 @@ def retrieveRefToken(usermail, password):
 def retrieveUserInfo(option, mail_address, password='not-some_nice.value'):
     if password != 'not-some_nice.value' and password != None:
         # means the password is entered and auth is needed
+        print('Gmail and password entered, auth needed')
         with sql.connect('database.db') as conn:
             cur = conn.cursor()
             try:
                 cur.execute('CREATE TABLE IF NOT EXISTS users (Id INT PRIMARY KEY, Email VARCHAR(255), Password VARCHAR(20), UserKey VARCHAR(255));')
                 cur.execute('SELECT Email, Password FROM users')
                 emails = cur.fetchall()
-                print(emails)
+                print('Type of returned emails', type(emails))
+                print('Email, Password', emails)
                 conn.commit()
             except Exception:
                 emails = {}
@@ -149,21 +166,25 @@ def retrieveUserInfo(option, mail_address, password='not-some_nice.value'):
                 return True if mail_address in emails else False
             elif option== 'gmail_and_pword':
                 for row in emails:
+                    print('Row i:', row)
                     return True if (row[0].lower(), row[1].lower()) == (mail_address.lower(), password.lower()) else False
     else:
         # means pword is not entered and mail lookup is needed
+        print('Gmail entered, mail lookup needed')
         with sql.connect('database.db') as conn:
             cur = conn.cursor()
             try:
                 cur.execute('CREATE TABLE IF NOT EXISTS users (Id INT PRIMARY KEY, Email VARCHAR(255), Password VARCHAR(20));')
                 cur.execute('SELECT Email FROM users')
                 emails = cur.fetchall()
-                print(emails)
+                print('Type of returned emails', type(emails))
+                print('Email', emails)
                 conn.commit()
             except Exception:
                 emails = []
                 conn.rollback()
             for i in emails:
+                print('Row i:', i)
                 return True if mail_address.lower() == i[0].lower() else False
 
 
@@ -172,7 +193,7 @@ def det_response():
     text_mes = 'END Mail sent successfully!'
     response = request.form['text']
     responses = response.split('*')
-    print(responses)
+    print('Webhook response:',responses)
     if response == '':
         text_mes = 'CON SigmaDial\n\nPlease enter your mail address to get started\nGmail:'
     elif len(responses) == 1:
@@ -190,8 +211,10 @@ def det_response():
     elif len(responses) == 5:
         text_mes = 'CON SigmaDial\n\nMessage body:'
     elif len(responses) == 6:
+        print('About to send mail')
         reference_token = retrieveRefToken(*responses[:2])
         if reference_token:
+            print('Token retrieved:', reference_token)
             text_mes = myapp.send_mail(reference_token, responses[0], *responses[3:])
         else:
             text_mes = 'END Error retrieving your token'
