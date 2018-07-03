@@ -97,7 +97,7 @@ def add_ref_token():
         return render_template('landing.html', auth_error='Error completing authentication. Try again later.')
 
 
-@app.route('authenticate', methods=['POST'])
+@app.route('/authenticate', methods=['POST'])
 def authe():
     auth_get = myapp.get_authorization(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET)
     print('Auth to be returned', auth_get)
