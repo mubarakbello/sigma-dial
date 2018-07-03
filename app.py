@@ -12,6 +12,7 @@ app = Flask(__name__)
 
 GOOGLE_CLIENT_ID = '691506785044-m79l433jote690ut6hkqktu3dr32oha7.apps.googleusercontent.com'
 GOOGLE_CLIENT_SECRET = '9qeJEKp5rYmptg-rjOObnOb8'
+GOOGLE_REFRESH_TOKEN = '1/w1r4JnpN9ZUkyI1jkBNkMsWzDRtf3-3ZhYd29Ik8WuA'
 
 """
 SigmaDial
@@ -37,6 +38,7 @@ Please enter your mail address to get started
 """
 
 
+@app.route('/webhook', methods=['POST'])
 def webhook():
     text_mes = 'END Mail sent successfully!'
     response = request.form['text']
@@ -58,7 +60,7 @@ def webhook():
         if responses[0] == '2': text_mes = 'CON SigmaDial\n\nMessage body:'
     elif len(responses) == 6:
         # if responses[0] == '2': text_mes = mail_sender(*responses[1:])
-        if responses[0] == '2': text_mes = myapp.send_mail(responses[1], *responses[3:])
+        if responses[0] == '2': text_mes = myapp.send_mail(GOOGLE_REFRESH_TOKEN, responses[1], *responses[3:])
     return text_mes
 
 
@@ -198,7 +200,7 @@ def retrieveUserInfo(option, mail_address, password='not-some_nice.value'):
             return False
 
 
-@app.route('/webhook', methods=['POST'])
+# @app.route('/webhook', methods=['POST'])
 def det_response():
     text_mes = 'END Mail sent successfully!'
     response = request.form['text']
