@@ -37,7 +37,7 @@
                 </div> -->
                 <div id="subs">
                     <h3>Follow this link to authorize your gmail</h3>
-                    <a style="color: lightseagreen;" target="_blank"></a>
+                    <a style="color: lightseagreen;" href="{{ auth_gen }}" target="_blank">{{ auth_gen }}</a>
                     <h3>Then copy and paste the authorization code provided by google here</h3>
                     <form action="/authen" method="POST" style="display: block !important">
                         <input type="text" name="ref_token" class="form-control" placeholder="Enter auth link here...">

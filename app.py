@@ -82,26 +82,28 @@ def index():
     print('GET request')
     return render_template('index.html')
 
-@app.route('/authen', methods=['POST', 'GET'])
+@app.route('/authen', methods=['POST'])
 def add_ref_token():
-    if request.method == 'POST':
-        user = request.form['usermail']
-        token = request.form['ref_token']
-        print('User, ref_token from request:', user, token)
-        token_obtained = myapp.get_token_after_permission(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, token)
-        print('Refresh Token obtained from gg:', token_obtained)
-        boolea = updateUserKey(user, token_obtained[0])
-        print(boolea)
-        if boolea:
-            return render_template('landing.html', auth_success='Authentication complete. You can exit now.')
-        else:
-            return render_template('landing.html', auth_error='Error completing authentication. Try again later.')
+    user = request.form['usermail']
+    token = request.form['ref_token']
+    print('User, ref_token from request:', user, token)
+    token_obtained = myapp.get_token_after_permission(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, token)
+    print('Refresh Token obtained from gg:', token_obtained)
+    boolea = updateUserKey(user, token_obtained[0])
+    print(boolea)
+    if boolea:
+        return render_template('landing.html', auth_success='Authentication complete. You can exit now.')
     else:
-        auth_get = myapp.get_authorization(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET)
-        print('Auth to be returned', auth_get)
-        mailing = request.form['emailfield']
-        print('Email field:', mailing)
-        return render_template('landing.html', auth_gen=auth_get, email=mailing)
+        return render_template('landing.html', auth_error='Error completing authentication. Try again later.')
+
+
+@app.route('authenticate', methods=['POST'])
+def authe():
+    auth_get = myapp.get_authorization(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET)
+    print('Auth to be returned', auth_get)
+    mailing = request.form['emailfield']
+    print('Email field:', mailing)
+    return render_template('landing.html', auth_gen=auth_get, email=mailing)
 
 
 def insertUser(mail_address, sigmadial_password):
@@ -171,7 +173,9 @@ def retrieveUserInfo(option, mail_address, password='not-some_nice.value'):
                 if len(emails) == 0: return False
                 for row in emails:
                     print('Row i:', row)
-                    return True if (row[0].lower(), row[1].lower()) == (mail_address.lower(), password.lower()) else False
+                    if (row[0].lower(), row[1].lower()) == (mail_address.lower(), password.lower()):
+                        return True
+                return False
     else:
         # means pword is not entered and mail lookup is needed
         print('Gmail entered, mail lookup needed')
@@ -189,7 +193,8 @@ def retrieveUserInfo(option, mail_address, password='not-some_nice.value'):
                 conn.rollback()
             for i in emails:
                 print('Row i:', i)
-                return True if mail_address.lower() == i[0].lower() else False
+                if mail_address.lower() == i[0].lower(): return True
+            return False
 
 
 @app.route('/webhook', methods=['POST'])
