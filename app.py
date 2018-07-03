@@ -174,6 +174,7 @@ def retrieveUserInfo(option, mail_address, password='not-some_nice.value'):
                 for row in emails:
                     print('Row i:', row)
                     if (row[0].lower(), row[1].lower()) == (mail_address.lower(), password.lower()):
+                        print('Password correct!')
                         return True
                 return False
     else:
