@@ -207,9 +207,8 @@ def det_response():
         text_mes = 'CON SigmaDial\n\nPlease enter your mail address to get started\nGmail:'
     elif len(responses) == 1:
         text_mes = check_if_registered('gmail', responses[0])
-    elif len(response) == 2:
+    elif len(responses) == 2:
         text_mes = check_if_registered('gmail_and_pword', responses[0], pword=responses[1])
-        # text_mes = 'CON SigmaDial\n\nEnter your gmail login details\nE-mail:'
     elif len(responses) == 3:
         if responses[2] == '2':
             text_mes = 'END SigmaDial\n\nThis feature isnt implemented yet. Thanks'
