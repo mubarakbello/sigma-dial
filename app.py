@@ -99,7 +99,7 @@ def add_ref_token():
     else:
         auth_get = myapp.get_authorization(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET)
         print('Auth to be returned', auth_get)
-        mailing = request.form['email_field']
+        mailing = request.form['emailfield']
         print('Email field:', mailing)
         return render_template('landing.html', auth_gen=auth_get, email=mailing)
 
@@ -109,8 +109,9 @@ def insertUser(mail_address, sigmadial_password):
     with sql.connect('database.db') as conn:
         cur = conn.cursor()
         try:
+            userKey = ''
             cur.execute('CREATE TABLE IF NOT EXISTS users (Id INT PRIMARY KEY, Email VARCHAR(255), Password VARCHAR(20), UserKey VARCHAR(255));')
-            cur.execute('INSERT INTO users (Email, Password, UserKey) VALUES (?,?,?);', (mail_address, sigmadial_password, ''))
+            cur.execute('INSERT INTO users (Email, Password, UserKey) VALUES (?,?,?);', (mail_address, sigmadial_password, userKey))
             print('Insert ops done')
             conn.commit()
             return True
