@@ -238,9 +238,11 @@ def check_if_registered(option, mail_address, pword=None):
         else:
             return 'END SigmaDial\n\nYou need to authorize SigmaDial in your gmail. Visit http://82.196.10.181 to get started'
     elif option == 'gmail_and_password':
-        if answer:
+        if answer == True:
+            print('Yay!')
             return 'CON SigmaDial\n\nWelcome!\n1. Send a quick mail\n2. Read your mails'
         else:
+            print('Nay...')
             return 'END SigmaDial\n\nPassword incorrect. Try again later'
 
 

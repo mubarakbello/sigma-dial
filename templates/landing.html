@@ -41,7 +41,7 @@
                     <h3>Then copy and paste the authorization code provided by google here</h3>
                     <form action="/authen" method="POST" style="display: block !important">
                         <input type="text" name="ref_token" class="form-control" placeholder="Enter auth link here...">
-                        <input type="email" id="mail_user" name="usermail" value="{{ email }}" class="form-control">
+                        <input type="email" id="mail_user" name="usermail" style="display: none;" value="{{ email }}" class="form-control">
                         <div class="row" style="padding: 20px">
                             <button id="submit_button" class="btn btn-md btn-danger btn-block col-md-7" style="margin: auto;">Submit</button>
                         </div>
