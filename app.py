@@ -160,7 +160,7 @@ def retrieveUserInfo(option, mail_address, password='not-some_nice.value'):
                 print('Email, Password', emails)
                 conn.commit()
             except Exception:
-                emails = {}
+                emails = []
                 conn.rollback()
             if option == 'gmail':
                 return True if mail_address in emails else False

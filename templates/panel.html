@@ -27,6 +27,11 @@
                         {{ logged_in }}
                     </div>
                 {% endif %}
+                {% if acc_created %}
+                    <div class="alert alert-success">
+                        {{ acc_created }}
+                    </div>
+                {% endif %}
                 <div class="text-center mb-4">
                     <img class="mb-4" src="../static/sigma.png" alt="" width="200" height="120">
                 </div>
@@ -48,7 +53,7 @@
                         <input type="text" name="ref_token" class="form-control" placeholder="Enter auth link here...">
                         <input type="email" id="mail_user" name="usermail" style="display: none" class="form-control">
                         <div class="row" style="padding: 20px">
-                            <button id="submit_button" onclick="passValue()" class="btn btn-md btn-danger btn-block col-md-7" style="margin: auto;">Submit</button>
+                            <button id="submit_button" class="btn btn-md btn-danger btn-block col-md-7" style="margin: auto;">Submit</button>
                         </div>
                         <p class="small text-muted text-center">By clicking 'Submit', you are giving SigmaDial the permission to access your mail</p>
                     </form>
@@ -65,6 +70,7 @@
         $(document).ready(function(){
             $('#auth_button').click(function(e){
                 e.preventDefault();
+                $('#mail_user').attr('value', $('#email_field').attr('value'));
                 $('#auth_button').text('Fetching Auth Link...').css('color', '#ff5867').css('cursor', 'progress').addClass('disabled');
                 $('a').load('https://dialmail.herokuapp.com/authen', function(){
                     $('a').css('color', 'red');
