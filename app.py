@@ -119,7 +119,8 @@ def insertUser(mail_address, sigmadial_password):
             print('Insert ops done')
             conn.commit()
             return True
-        except Exception:
+        except Exception as e:
+            print(e)
             conn.rollback()
             return False
 
@@ -132,7 +133,8 @@ def updateUserKey(mail_address, user_key):
             print('Most liikely update is complete')
             conn.commit()
             return True
-        except Exception:
+        except Exception as e:
+            print(e)
             conn.rollback()
             return False
 
@@ -148,7 +150,8 @@ def retrieveRefToken(usermail, password):
                 print('Userkeys:', userKey)
                 conn.commit()
                 return userKey
-            except Exception:
+            except Exception as e:
+                print(e)
                 conn.rollback()
                 return False
 
@@ -166,7 +169,8 @@ def retrieveUserInfo(option, mail_address, password='not-some_nice.value'):
                 print('Type of returned emails', type(emails))
                 print('Email, Password', emails)
                 conn.commit()
-            except Exception:
+            except Exception as e:
+                print('Exception:', e)
                 emails = []
                 conn.rollback()
             if option == 'gmail':
@@ -191,13 +195,30 @@ def retrieveUserInfo(option, mail_address, password='not-some_nice.value'):
                 print('Type of returned emails', type(emails))
                 print('Email', emails)
                 conn.commit()
-            except Exception:
+            except Exception as e:
+                print('Exception:', e)
                 emails = []
                 conn.rollback()
             for i in emails:
                 print('Row i:', i)
                 if mail_address.lower() == i[0].lower(): return True
             return False
+
+
+def check_if_registered(option, mail_address, pword=None):
+    answer = retrieveUserInfo(option, mail_address, pword)
+    if option == 'gmail':
+        if answer:
+            return 'CON SigmaDial\n\nEnter your SigmaDial Password:'
+        else:
+            return 'END SigmaDial\n\nYou need to authorize SigmaDial in your gmail. Visit http://82.196.10.181 to get started'
+    elif option == 'gmail_and_password':
+        if answer:
+            print('Yay!')
+            return 'CON SigmaDial\n\nWelcome!\n1. Send a quick mail\n2. Read your mails'
+        else:
+            print('Nay...')
+            return 'END SigmaDial\n\nPassword incorrect. Try again later'
 
 
 @app.route('/webhook', methods=['POST'])
@@ -233,22 +254,6 @@ def det_response():
         return text_mes
     else:
         return 'END Nothing was returned by SigmaDial'
-
-
-def check_if_registered(option, mail_address, pword=None):
-    answer = retrieveUserInfo(option, mail_address, pword)
-    if option == 'gmail':
-        if answer:
-            return 'CON SigmaDial\n\nEnter your SigmaDial Password:'
-        else:
-            return 'END SigmaDial\n\nYou need to authorize SigmaDial in your gmail. Visit http://82.196.10.181 to get started'
-    elif option == 'gmail_and_password':
-        if answer == True:
-            print('Yay!')
-            return 'CON SigmaDial\n\nWelcome!\n1. Send a quick mail\n2. Read your mails'
-        else:
-            print('Nay...')
-            return 'END SigmaDial\n\nPassword incorrect. Try again later'
 
 
 # with app.test_request_context() as src:
