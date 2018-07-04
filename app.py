@@ -38,7 +38,7 @@ Please enter your mail address to get started
 """
 
 
-@app.route('/webhook', methods=['POST'])
+# @app.route('/webhook', methods=['POST'])
 def webhook():
     text_mes = 'END Mail sent successfully!'
     response = request.form['text']
@@ -47,7 +47,7 @@ def webhook():
     if response == '':
         text_mes = 'CON SigmaDial\n\nRead and send quick mails!\n1. Read mails\n2. Send a quick mail'
     elif response == '1':
-        text_mes = 'CON '
+        text_mes = 'END This feature isnt implemented yet. Try again later.'
     elif response == '2':
         text_mes = 'CON SigmaDial\n\nEnter your gmail login details\nE-mail:'
     elif len(responses) == 2:
@@ -200,9 +200,9 @@ def retrieveUserInfo(option, mail_address, password='not-some_nice.value'):
             return False
 
 
-# @app.route('/webhook', methods=['POST'])
+@app.route('/webhook', methods=['POST'])
 def det_response():
-    text_mes = 'END Mail sent successfully!'
+    text_mes = "END Mail couldn't send for some reason!"
     response = request.form['text']
     responses = response.split('*')
     print('Webhook response:',responses)
@@ -229,7 +229,10 @@ def det_response():
             text_mes = myapp.send_mail(reference_token, responses[0], *responses[3:])
         else:
             text_mes = 'END Error retrieving your token'
-    return text_mes
+    if response is not None:
+        return text_mes
+    else:
+        return 'END Nothing was returned by SigmaDial'
 
 
 def check_if_registered(option, mail_address, pword=None):
