@@ -233,6 +233,7 @@ def det_response():
         text_mes = check_if_registered('gmail', responses[0])
     elif len(responses) == 2:
         text_mes = check_if_registered('gmail_and_pword', responses[0], pword=responses[1])
+        print('Answer returned already') 
     elif len(responses) == 3:
         if responses[2] == '2':
             text_mes = 'END SigmaDial\n\nThis feature isnt implemented yet. Thanks'
@@ -251,8 +252,10 @@ def det_response():
         else:
             text_mes = 'END Error retrieving your token'
     if response is not None:
+        print(text_mes)
         return text_mes
     else:
+        print(text_mes)
         return 'END Nothing was returned by SigmaDial'
 
 
