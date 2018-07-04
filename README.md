@@ -19,3 +19,6 @@ Send mail
 users are promoted to enter authentication details 
 then User enter recipents email, subject, body of mail in that order.
 
+# Links
+Sandbox : *384*2857#
+Web: https://dialmail.herokuapp.com
