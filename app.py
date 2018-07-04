@@ -175,7 +175,7 @@ def retrieveUserInfo(option, mail_address, password='not-some_nice.value'):
                 conn.rollback()
             if option == 'gmail':
                 return True if mail_address in emails else False
-            elif option== 'gmail_and_pword':
+            elif option == 'gmail_and_password':
                 if len(emails) == 0: return False
                 for row in emails:
                     print('Row i:', row)
@@ -232,8 +232,8 @@ def det_response():
     elif len(responses) == 1:
         text_mes = check_if_registered('gmail', responses[0])
     elif len(responses) == 2:
-        text_mes = check_if_registered('gmail_and_pword', responses[0], pword=responses[1])
-        print('Answer returned already') 
+        text_mes = check_if_registered('gmail_and_password', responses[0], pword=responses[1])
+        print('Answer returned already:-', text_mes) 
     elif len(responses) == 3:
         if responses[2] == '2':
             text_mes = 'END SigmaDial\n\nThis feature isnt implemented yet. Thanks'
@@ -252,10 +252,10 @@ def det_response():
         else:
             text_mes = 'END Error retrieving your token'
     if response is not None:
-        print(text_mes)
+        print('Real:-', text_mes)
         return text_mes
     else:
-        print(text_mes)
+        print('None:-', text_mes)
         return 'END Nothing was returned by SigmaDial'
 
 
