@@ -113,6 +113,7 @@ def refresh_authorization(google_client_id, google_client_secret, refresh_token)
 
 
 def send_mail(ref_token, fromaddr, toaddr, subject, message):
+    fromaddr = fromaddr.lower()
     access_token, expires_in = refresh_authorization(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, ref_token)
     auth_string = generate_oauth2_string(fromaddr, access_token, as_base64=True)
 

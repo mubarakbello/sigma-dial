@@ -36,7 +36,7 @@ Please enter your mail address to get started
     -mail-not-registered
         You need to authorize SigmaDial in your gmail. Visit blahblahblah.com to get started
 """
-
+# All print statements for debugging purposes only
 
 # @app.route('/webhook', methods=['POST'])
 def webhook():
@@ -67,7 +67,7 @@ def webhook():
 @app.route('/', methods=['POST', 'GET'])
 def index():
     if request.method == 'POST':
-        usermail = request.form['mail']
+        usermail = request.form['mail'].lower()
         user_sigmadial_pass = request.form['password']
         print('Mail, pword from request:', usermail, user_sigmadial_pass)
         boolea = retrieveUserInfo('gmail_and_pword', usermail, user_sigmadial_pass)
@@ -86,7 +86,7 @@ def index():
 
 @app.route('/authen', methods=['POST'])
 def add_ref_token():
-    user = request.form['usermail']
+    user = request.form['usermail'].lower()
     token = request.form['ref_token']
     print('User, ref_token from request:', user, token)
     token_obtained = myapp.get_token_after_permission(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, token)
@@ -109,6 +109,7 @@ def authe():
 
 
 def insertUser(mail_address, sigmadial_password):
+    mail_address = mail_address.lower()
     print('About to insert user info to db:', mail_address, sigmadial_password)
     with sql.connect('database.db') as conn:
         cur = conn.cursor()
@@ -125,6 +126,7 @@ def insertUser(mail_address, sigmadial_password):
             return False
 
 def updateUserKey(mail_address, user_key):
+    mail_address = mail_address.lower()
     print('About to update user key:', mail_address, user_key)
     with sql.connect('database.db') as conn:
         cur = conn.cursor()
@@ -140,11 +142,12 @@ def updateUserKey(mail_address, user_key):
 
 
 def retrieveRefToken(usermail, password):
+    usermail = usermail.lower()
     print('About to retrieve ref token:', usermail)
     with sql.connect('database.db') as conn:
             cur = conn.cursor()
             try:
-                cur.execute('SELECT UserKey FROM users WHERE Email = ?', (usermail))
+                cur.execute('SELECT UserKey FROM users WHERE Email = ?', (usermail,))
                 userKey = cur.fetchall()
                 print('Type of userkeys returned', type(userKey))
                 print('Userkeys:', userKey)
@@ -157,6 +160,7 @@ def retrieveRefToken(usermail, password):
 
 
 def retrieveUserInfo(option, mail_address, password='not-some_nice.value'):
+    mail_address = mail_address.lower()
     if password != 'not-some_nice.value' and password != None:
         # means the password is entered and auth is needed
         print('Gmail and password entered, auth needed')
@@ -206,6 +210,7 @@ def retrieveUserInfo(option, mail_address, password='not-some_nice.value'):
 
 
 def check_if_registered(option, mail_address, pword=None):
+    mail_address = mail_address.lower()
     answer = retrieveUserInfo(option, mail_address, pword)
     if option == 'gmail':
         if answer:
@@ -230,9 +235,9 @@ def det_response():
     if response == '':
         text_mes = 'CON SigmaDial\n\nPlease enter your mail address to get started\nGmail:'
     elif len(responses) == 1:
-        text_mes = check_if_registered('gmail', responses[0])
+        text_mes = check_if_registered('gmail', responses[0].lower())
     elif len(responses) == 2:
-        text_mes = check_if_registered('gmail_and_password', responses[0], pword=responses[1])
+        text_mes = check_if_registered('gmail_and_password', responses[0].lower(), pword=responses[1])
         print('Answer returned already:-', text_mes) 
     elif len(responses) == 3:
         if responses[2] == '2':
