@@ -9,16 +9,13 @@ On dialing the shortcode you get to settle between two option
 -Read mails
 -Send quick mail
 
+Users need to grant access to their google account by logging into https://dialmail.herokuapp.com and completing the steps there. After that, you can now send mails via the ussd code \*384\*2857#
 
-Read mail
--
-Users will be promoted to enter authentication details and get an sms of your emails.
-
-Send mail
+To send mails:
 -
 users are promoted to enter authentication details 
 then User enter recipents email, subject, body of mail in that order.
 
 # Links
-Sandbox : *384*2857#
+Sandbox : \*384\*2857#
 Web: https://dialmail.herokuapp.com

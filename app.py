@@ -94,9 +94,9 @@ def add_ref_token():
     boolea = updateUserKey(user, token_obtained[0])
     print(boolea)
     if boolea:
-        return render_template('landing.html', auth_success='Authentication complete. You can exit now.')
+        return render_template('landing.html', auth_success='Authentication complete. You can now use SigmaDial via *384*2857#')
     else:
-        return render_template('landing.html', auth_error='Error completing authentication. Try again later.')
+        return render_template('landing.html', auth_error='Error completing authentication. Please ensure that your details are correct then try again later.')
 
 
 @app.route('/authenticate', methods=['POST'])
@@ -109,7 +109,7 @@ def authe():
 
 
 def insertUser(mail_address, sigmadial_password):
-    print('About to insert user info to db')
+    print('About to insert user info to db:', mail_address, sigmadial_password)
     with sql.connect('database.db') as conn:
         cur = conn.cursor()
         try:
@@ -125,7 +125,7 @@ def insertUser(mail_address, sigmadial_password):
             return False
 
 def updateUserKey(mail_address, user_key):
-    print('About to update user key')
+    print('About to update user key:', mail_address, user_key)
     with sql.connect('database.db') as conn:
         cur = conn.cursor()
         try:
@@ -140,16 +140,16 @@ def updateUserKey(mail_address, user_key):
 
 
 def retrieveRefToken(usermail, password):
-    print('About to retrieve ref token')
+    print('About to retrieve ref token:', usermail)
     with sql.connect('database.db') as conn:
             cur = conn.cursor()
             try:
-                cur.execute('SELECT UserKey FROM users WHERE Email = ? AND Password = ?', (usermail, password))
+                cur.execute('SELECT UserKey FROM users WHERE Email = ?', (usermail))
                 userKey = cur.fetchall()
                 print('Type of userkeys returned', type(userKey))
                 print('Userkeys:', userKey)
                 conn.commit()
-                return userKey
+                return userKey[0]
             except Exception as e:
                 print(e)
                 conn.rollback()
@@ -211,7 +211,7 @@ def check_if_registered(option, mail_address, pword=None):
         if answer:
             return 'CON SigmaDial\n\nEnter your SigmaDial Password:'
         else:
-            return 'END SigmaDial\n\nYou need to authorize SigmaDial in your gmail. Visit http://82.196.10.181 to get started'
+            return 'END SigmaDial\n\nYou need to authorize SigmaDial in your gmail. Visit https://dialmail.herokuapp.com to get started'
     elif option == 'gmail_and_password':
         if answer:
             print('Yay!')
