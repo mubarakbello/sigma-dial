@@ -19,3 +19,6 @@ then User enter recipents email, subject, body of mail in that order.
 # Links
 Sandbox : \*384\*2857#
 Web: https://dialmail.herokuapp.com
+
+#TESTERS NOTICE 
+App runs on sqlite database on Heroku, so fields are frequently cleared due to Heroku's sqlite conditions. USSD app can be accessed via Africa's Talking sandbox. 
