@@ -152,7 +152,7 @@ def retrieveRefToken(usermail, password):
                 print('Type of userkeys returned', type(userKey))
                 print('Userkeys:', userKey)
                 conn.commit()
-                return userKey[0]
+                return userKey[0][0]
             except Exception as e:
                 print(e)
                 conn.rollback()
