@@ -5,17 +5,18 @@ import myapp
 from EmailSystem import mail_sender
 
 USERNAME = 'sandbox'
-API_KEY = '5e09c729236f9fd4bb0cd92e4ede25576f366734b442a0bd5297eda12385698d'
+API_KEY = '' # add Africa's talking api key here
 afs.initialize(USERNAME, API_KEY)
 
 app = Flask(__name__)
 
-GOOGLE_CLIENT_ID = '691506785044-m79l433jote690ut6hkqktu3dr32oha7.apps.googleusercontent.com'
-GOOGLE_CLIENT_SECRET = '9qeJEKp5rYmptg-rjOObnOb8'
-GOOGLE_REFRESH_TOKEN = '1/w1r4JnpN9ZUkyI1jkBNkMsWzDRtf3-3ZhYd29Ik8WuA'
+# Set up goole credentials here
+GOOGLE_CLIENT_ID = ''
+GOOGLE_CLIENT_SECRET = ''
+GOOGLE_REFRESH_TOKEN = ''
 
 """
-SigmaDial
+SigmaDial Workflow
 
 Please enter your mail address to get started
     -mail-registered
@@ -38,6 +39,7 @@ Please enter your mail address to get started
 """
 # All print statements for debugging purposes only
 
+
 # @app.route('/webhook', methods=['POST'])
 def webhook():
     text_mes = 'END Mail sent successfully!'
@@ -59,7 +61,6 @@ def webhook():
     elif len(responses) == 5:
         if responses[0] == '2': text_mes = 'CON SigmaDial\n\nMessage body:'
     elif len(responses) == 6:
-        # if responses[0] == '2': text_mes = mail_sender(*responses[1:])
         if responses[0] == '2': text_mes = myapp.send_mail(GOOGLE_REFRESH_TOKEN, responses[1], *responses[3:])
     return text_mes
 
@@ -83,6 +84,7 @@ def index():
                 return render_template('index.html', error='Error creating your account.')
     print('GET request')
     return render_template('index.html')
+
 
 @app.route('/authen', methods=['POST'])
 def add_ref_token():
